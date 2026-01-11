@@ -13,7 +13,7 @@
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #f8f9fa;
-            padding-bottom: 70px; /* Space for bottom nav */
+            padding-bottom: 70px;
         }
         .hub-header {
             background: linear-gradient(135deg, #6610f2, #0d6efd);
@@ -54,7 +54,6 @@
             font-size: 1.5rem;
             display: block;
         }
-        /* New section styles */
         .page-section {
             display: none;
         }
@@ -67,17 +66,18 @@
             padding: 20px;
             margin-top: -30px;
         }
-        /* Leaderboard Specific Styles */
         .rank-1 { background: #fff3cd; border: 1px solid #ffeeba; }
         .badge-gold { color: #ffd700; font-size: 1.2rem; }
         
         /* Avatar Style */
         .profile-avatar {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
-            border: 3px solid #0d6efd;
+            border: 4px solid #0d6efd;
             margin-bottom: 10px;
+            background: #e9ecef;
+            object-fit: contain;
         }
     </style>
 </head>
@@ -94,7 +94,6 @@
 
         <div class="container mt-4">
             <h5 class="fw-bold mb-3">Popular Courses</h5>
-            
             <div class="row g-3">
                 <div class="col-12" onclick="showPage('course-page')">
                     <div class="card course-card shadow-sm">
@@ -105,20 +104,6 @@
                             <div>
                                 <h6 class="mb-0 fw-bold">Web Development 101</h6>
                                 <small class="text-muted">24 Lessons • Beginner</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12">
-                    <div class="card course-card shadow-sm">
-                        <div class="card-body d-flex align-items-center">
-                            <div class="bg-success text-white rounded p-3 me-3">
-                                <i class="bi bi-database fs-3"></i>
-                            </div>
-                            <div>
-                                <h6 class="mb-0 fw-bold">Firebase for Mobile</h6>
-                                <small class="text-muted">15 Lessons • Intermediate</small>
                             </div>
                         </div>
                     </div>
@@ -144,26 +129,6 @@
                     </div>
                     <i class="bi bi-trophy-fill badge-gold"></i>
                 </div>
-                <div class="list-group-item d-flex justify-content-between align-items-center border-0 mb-2 shadow-sm rounded-4">
-                    <div class="d-flex align-items-center">
-                        <span class="fw-bold me-3 text-muted">2</span>
-                        <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px;">A</div>
-                        <div>
-                            <h6 class="mb-0 fw-bold">Alex Dev</h6>
-                            <small class="text-muted">980 XP</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item d-flex justify-content-between align-items-center border-0 mb-2 shadow-sm rounded-4">
-                    <div class="d-flex align-items-center">
-                        <span class="fw-bold me-3 text-muted">3</span>
-                        <div class="bg-info text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px;">M</div>
-                        <div>
-                            <h6 class="mb-0 fw-bold">Mike Tech</h6>
-                            <small class="text-muted">850 XP</small>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -181,7 +146,6 @@
                     </div>
                 </div>
             </div>
-
             <div id="posts-container">
                 <div class="text-center text-muted py-5">Loading hub updates...</div>
             </div>
@@ -197,22 +161,13 @@
                 <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" class="rounded shadow" allowfullscreen></iframe>
             </div>
             <h4 class="fw-bold">Web Development 101</h4>
-            <p class="text-muted small">Lesson 1: Introduction to HTML Structure</p>
-            <hr>
-            <h6>Lesson Resources</h6>
-            <div class="list-group list-group-flush">
-                <div class="list-group-item bg-transparent d-flex justify-content-between align-items-center">
-                    <span><i class="bi bi-file-pdf text-danger"></i> Course Syllabus.pdf</span>
-                    <i class="bi bi-download"></i>
-                </div>
-            </div>
         </div>
     </div>
 
     <div id="profile-page" class="page-section">
         <header class="hub-header shadow text-center">
-            <h2 class="fw-bold">Join the Hub</h2>
-            <p class="opacity-75">Create an account to track progress</p>
+            <h2 class="fw-bold">My Hub Profile</h2>
+            <p class="opacity-75">Customize your identity</p>
         </header>
         <div class="container auth-overlay shadow-sm mx-auto" style="max-width: 90%;">
             <div id="auth-container">
@@ -226,12 +181,17 @@
                 </div>
                 <button type="button" id="btn-signup" class="btn btn-primary w-100 rounded-pill py-2">Create Account</button>
                 <p id="auth-msg" class="text-center mt-3 small text-danger"></p>
-                <p class="text-center mt-2 small">Already have an account? <a href="#">Login</a></p>
             </div>
             
             <div id="logged-in-container" style="display:none;" class="text-center py-4">
                 <img id="user-avatar" src="" alt="Avatar" class="profile-avatar shadow-sm">
-                <h5 id="welcome-text" class="fw-bold mt-2">Welcome!</h5>
+                <div class="mb-3">
+                    <button id="btn-change-avatar" class="btn btn-sm btn-primary rounded-pill px-4">
+                        <i class="bi bi-shuffle"></i> Change Style & Look
+                    </button>
+                    <p class="small text-muted mt-2">Tap to cycle through Humans, Robots, Pixels and more!</p>
+                </div>
+                <h5 id="welcome-text" class="fw-bold"></h5>
                 <button type="button" id="btn-logout" class="btn btn-outline-danger btn-sm rounded-pill mt-3">Sign Out</button>
             </div>
         </div>
@@ -239,29 +199,24 @@
 
     <nav class="bottom-nav">
         <a href="javascript:void(0)" class="nav-item active" onclick="showPage('home-page', this)">
-            <i class="bi bi-house-door-fill"></i>
-            Home
+            <i class="bi bi-house-door-fill"></i>Home
         </a>
         <a href="javascript:void(0)" class="nav-item" onclick="showPage('leaderboard-page', this)">
-            <i class="bi bi-trophy"></i>
-            Ranks
+            <i class="bi bi-trophy"></i>Ranks
         </a>
         <a href="javascript:void(0)" class="nav-item" onclick="showPage('community-page', this)">
-            <i class="bi bi-people"></i>
-            Community
+            <i class="bi bi-people"></i>Community
         </a>
         <a href="javascript:void(0)" class="nav-item" onclick="showPage('profile-page', this)">
-            <i class="bi bi-person"></i>
-            Profile
+            <i class="bi bi-person"></i>Profile
         </a>
     </nav>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // Your Firebase configuration
         const firebaseConfig = {
           apiKey: "AIzaSyCF6xYhmPrAV_QRWib0qxjLFxWpT_Auvg4",
           authDomain: "selena-tech-educational-hub.firebaseapp.com",
@@ -271,28 +226,39 @@
           appId: "1:927163870296:web:3a92d73b28fbb42dd0ae2d"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // List of all free avatar styles available in DiceBear
+        const avatarStyles = ['avataaars', 'bottts', 'pixel-art', 'adventurer', 'big-smile'];
         let currentUserEmail = "";
 
-        // --- MONITOR AUTH STATE ---
-        onAuthStateChanged(auth, (user) => {
+        // Function to build the URL based on saved style and seed
+        const getAvatarUrl = (style, seed) => {
+            return `https://api.dicebear.com/7.x/${style}/svg?seed=${seed}`;
+        };
+
+        onAuthStateChanged(auth, async (user) => {
             const authForm = document.getElementById('auth-container');
             const welcomeBox = document.getElementById('logged-in-container');
-            const welcomeText = document.getElementById('welcome-text');
             const avatarImg = document.getElementById('user-avatar');
 
             if (user) {
                 currentUserEmail = user.email;
                 authForm.style.display = "none";
                 welcomeBox.style.display = "block";
-                welcomeText.innerText = "Hello, " + user.email;
-                
-                // Set Card-Free Avatar based on email
-                avatarImg.src = `https://api.dicebear.com/7.x/bottts/svg?seed=${user.email}`;
+                document.getElementById('welcome-text').innerText = user.email;
+
+                // Fetch user settings from Firestore
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists()) {
+                    const data = userDoc.data();
+                    avatarImg.src = getAvatarUrl(data.avatarStyle, data.avatarSeed);
+                } else {
+                    // Default if no settings found
+                    avatarImg.src = getAvatarUrl('avataaars', user.email);
+                }
             } else {
                 currentUserEmail = "";
                 authForm.style.display = "block";
@@ -300,7 +266,24 @@
             }
         });
 
-        // --- SIGN UP FUNCTION ---
+        // SHUFFLE BOTH STYLE AND LOOK
+        document.getElementById('btn-change-avatar').addEventListener('click', async () => {
+            const user = auth.currentUser;
+            if(!user) return;
+
+            const randomStyle = avatarStyles[Math.floor(Math.random() * avatarStyles.length)];
+            const randomSeed = Math.floor(Math.random() * 50000);
+            
+            const avatarImg = document.getElementById('user-avatar');
+            avatarImg.src = getAvatarUrl(randomStyle, randomSeed);
+
+            // Save to Firestore (Card-Free)
+            await setDoc(doc(db, "users", user.uid), {
+                avatarStyle: randomStyle,
+                avatarSeed: randomSeed
+            }, { merge: true });
+        });
+
         document.getElementById('btn-signup').addEventListener('click', () => {
             const email = document.getElementById('user-email').value;
             const pass = document.getElementById('user-pass').value;
@@ -309,53 +292,45 @@
 
         document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
 
-        // --- COMMUNITY FEED LOGIC ---
-
-        // 1. Send Post to Firestore
+        // Community Feed
         document.getElementById('btn-post').addEventListener('click', async () => {
             const text = document.getElementById('post-input').value;
-            if(!currentUserEmail) { alert("Please login to post!"); return; }
-            if(!text) return;
+            if(!currentUserEmail || !text) return;
 
-            try {
-                await addDoc(collection(db, "posts"), {
-                    user: currentUserEmail,
-                    content: text,
-                    timestamp: serverTimestamp()
-                });
-                document.getElementById('post-input').value = ""; // Clear input
-            } catch (e) { console.error("Error adding post: ", e); }
+            const userDoc = await getDoc(doc(db, "users", auth.currentUser.uid));
+            const userData = userDoc.exists() ? userDoc.data() : { avatarStyle: 'avataaars', avatarSeed: currentUserEmail };
+
+            await addDoc(collection(db, "posts"), {
+                user: currentUserEmail,
+                content: text,
+                style: userData.avatarStyle,
+                seed: userData.avatarSeed,
+                timestamp: serverTimestamp()
+            });
+            document.getElementById('post-input').value = "";
         });
 
-        // 2. Listen for Real-time Updates
-        const q = query(collection(db, "posts"), orderBy("timestamp", "desc"));
-        onSnapshot(q, (snapshot) => {
+        onSnapshot(query(collection(db, "posts"), orderBy("timestamp", "desc")), (snapshot) => {
             const postsContainer = document.getElementById('posts-container');
-            postsContainer.innerHTML = ""; // Clear loader
-            
+            postsContainer.innerHTML = "";
             snapshot.forEach((doc) => {
                 const post = doc.data();
-                // Generate avatar for the post user
-                const postAvatar = `https://api.dicebear.com/7.x/bottts/svg?seed=${post.user}`;
-                
-                const postHtml = `
+                const pUrl = getAvatarUrl(post.style || 'avataaars', post.seed || post.user);
+                postsContainer.innerHTML += `
                     <div class="card shadow-sm mb-3 border-0">
                         <div class="card-body">
                             <div class="d-flex align-items-center mb-2">
-                                <img src="${postAvatar}" class="rounded-circle border" style="width: 35px; height: 35px; margin-right: 10px;">
-                                <div class="ms-0">
+                                <img src="${pUrl}" class="rounded-circle border" style="width: 40px; height: 40px; margin-right: 10px; background: #f0f0f0;">
+                                <div>
                                     <h6 class="mb-0 fw-bold small">${post.user}</h6>
                                     <small class="text-muted" style="font-size: 0.7rem;">${post.timestamp ? new Date(post.timestamp.toDate()).toLocaleString() : 'Just now'}</small>
                                 </div>
                             </div>
                             <p class="mb-0 small">${post.content}</p>
                         </div>
-                    </div>
-                `;
-                postsContainer.innerHTML += postHtml;
+                    </div>`;
             });
         });
-
     </script>
 
     <script>
@@ -369,6 +344,5 @@
             window.scrollTo(0,0);
         }
     </script>
-
 </body>
 </html>
