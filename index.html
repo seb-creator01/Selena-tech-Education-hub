@@ -67,6 +67,9 @@
             padding: 20px;
             margin-top: -30px;
         }
+        /* Leaderboard Specific Styles */
+        .rank-1 { background: #fff3cd; border: 1px solid #ffeeba; }
+        .badge-gold { color: #ffd700; font-size: 1.2rem; }
     </style>
 </head>
 <body>
@@ -108,6 +111,47 @@
                                 <h6 class="mb-0 fw-bold">Firebase for Mobile</h6>
                                 <small class="text-muted">15 Lessons • Intermediate</small>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="leaderboard-page" class="page-section">
+        <div class="p-3 bg-white border-bottom sticky-top">
+            <h5 class="fw-bold mb-0 text-center text-primary">Top Learners</h5>
+        </div>
+        <div class="container mt-3">
+            <div class="list-group">
+                <div class="list-group-item d-flex justify-content-between align-items-center border-0 mb-2 shadow-sm rounded-4 rank-1">
+                    <div class="d-flex align-items-center">
+                        <span class="fw-bold me-3 badge-gold">1</span>
+                        <div class="bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px;">S</div>
+                        <div>
+                            <h6 class="mb-0 fw-bold">Selena</h6>
+                            <small class="text-muted">1,250 XP</small>
+                        </div>
+                    </div>
+                    <i class="bi bi-trophy-fill badge-gold"></i>
+                </div>
+                <div class="list-group-item d-flex justify-content-between align-items-center border-0 mb-2 shadow-sm rounded-4">
+                    <div class="d-flex align-items-center">
+                        <span class="fw-bold me-3 text-muted">2</span>
+                        <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px;">A</div>
+                        <div>
+                            <h6 class="mb-0 fw-bold">Alex Dev</h6>
+                            <small class="text-muted">980 XP</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item d-flex justify-content-between align-items-center border-0 mb-2 shadow-sm rounded-4">
+                    <div class="d-flex align-items-center">
+                        <span class="fw-bold me-3 text-muted">3</span>
+                        <div class="bg-info text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px;">M</div>
+                        <div>
+                            <h6 class="mb-0 fw-bold">Mike Tech</h6>
+                            <small class="text-muted">850 XP</small>
                         </div>
                     </div>
                 </div>
@@ -195,9 +239,9 @@
             <i class="bi bi-house-door-fill"></i>
             Home
         </a>
-        <a href="javascript:void(0)" class="nav-item" onclick="showPage('home-page', this)">
-            <i class="bi bi-book"></i>
-            Courses
+        <a href="javascript:void(0)" class="nav-item" onclick="showPage('leaderboard-page', this)">
+            <i class="bi bi-trophy"></i>
+            Ranks
         </a>
         <a href="javascript:void(0)" class="nav-item" onclick="showPage('community-page', this)">
             <i class="bi bi-people"></i>
