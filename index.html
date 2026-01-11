@@ -70,6 +70,15 @@
         /* Leaderboard Specific Styles */
         .rank-1 { background: #fff3cd; border: 1px solid #ffeeba; }
         .badge-gold { color: #ffd700; font-size: 1.2rem; }
+        
+        /* Avatar Style */
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #0d6efd;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -221,7 +230,7 @@
             </div>
             
             <div id="logged-in-container" style="display:none;" class="text-center py-4">
-                <div class="bi bi-person-check-fill text-success" style="font-size: 3rem;"></div>
+                <img id="user-avatar" src="" alt="Avatar" class="profile-avatar shadow-sm">
                 <h5 id="welcome-text" class="fw-bold mt-2">Welcome!</h5>
                 <button type="button" id="btn-logout" class="btn btn-outline-danger btn-sm rounded-pill mt-3">Sign Out</button>
             </div>
@@ -274,12 +283,16 @@
             const authForm = document.getElementById('auth-container');
             const welcomeBox = document.getElementById('logged-in-container');
             const welcomeText = document.getElementById('welcome-text');
+            const avatarImg = document.getElementById('user-avatar');
 
             if (user) {
                 currentUserEmail = user.email;
                 authForm.style.display = "none";
                 welcomeBox.style.display = "block";
                 welcomeText.innerText = "Hello, " + user.email;
+                
+                // Set Card-Free Avatar based on email
+                avatarImg.src = `https://api.dicebear.com/7.x/bottts/svg?seed=${user.email}`;
             } else {
                 currentUserEmail = "";
                 authForm.style.display = "block";
@@ -322,14 +335,15 @@
             
             snapshot.forEach((doc) => {
                 const post = doc.data();
+                // Generate avatar for the post user
+                const postAvatar = `https://api.dicebear.com/7.x/bottts/svg?seed=${post.user}`;
+                
                 const postHtml = `
                     <div class="card shadow-sm mb-3 border-0">
                         <div class="card-body">
                             <div class="d-flex align-items-center mb-2">
-                                <div class="bg-info text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px; font-size: 0.8rem;">
-                                    ${post.user.substring(0,2).toUpperCase()}
-                                </div>
-                                <div class="ms-2">
+                                <img src="${postAvatar}" class="rounded-circle border" style="width: 35px; height: 35px; margin-right: 10px;">
+                                <div class="ms-0">
                                     <h6 class="mb-0 fw-bold small">${post.user}</h6>
                                     <small class="text-muted" style="font-size: 0.7rem;">${post.timestamp ? new Date(post.timestamp.toDate()).toLocaleString() : 'Just now'}</small>
                                 </div>
