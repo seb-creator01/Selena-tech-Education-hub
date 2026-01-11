@@ -166,24 +166,15 @@
         <div class="container mt-3">
             <div class="card shadow-sm mb-4 border-0">
                 <div class="card-body">
-                    <textarea class="form-control border-0 bg-light" rows="2" placeholder="Share something with the hub..."></textarea>
+                    <textarea id="post-input" class="form-control border-0 bg-light" rows="2" placeholder="Share something with the hub..."></textarea>
                     <div class="d-flex justify-content-end mt-2">
-                        <button class="btn btn-primary btn-sm rounded-pill px-3">Post Update</button>
+                        <button id="btn-post" class="btn btn-primary btn-sm rounded-pill px-3">Post Update</button>
                     </div>
                 </div>
             </div>
 
-            <div class="card shadow-sm mb-3 border-0">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-2">
-                        <div class="bg-info text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">ST</div>
-                        <div class="ms-2">
-                            <h6 class="mb-0 fw-bold">Selena Admin</h6>
-                            <small class="text-muted">Just now</small>
-                        </div>
-                    </div>
-                    <p>Welcome to the Selena-tech Education Hub! Start a course or ask a question here. 🚀</p>
-                </div>
+            <div id="posts-container">
+                <div class="text-center text-muted py-5">Loading hub updates...</div>
             </div>
         </div>
     </div>
@@ -215,22 +206,25 @@
             <p class="opacity-75">Create an account to track progress</p>
         </header>
         <div class="container auth-overlay shadow-sm mx-auto" style="max-width: 90%;">
-            <form>
-                <div class="mb-3">
-                    <label class="form-label small fw-bold">Full Name</label>
-                    <input type="text" class="form-control rounded-pill" placeholder="Enter name">
-                </div>
+            <div id="auth-container">
                 <div class="mb-3">
                     <label class="form-label small fw-bold">Email</label>
-                    <input type="email" class="form-control rounded-pill" placeholder="email@example.com">
+                    <input type="email" id="user-email" class="form-control rounded-pill" placeholder="email@example.com">
                 </div>
                 <div class="mb-3">
                     <label class="form-label small fw-bold">Password</label>
-                    <input type="password" class="form-control rounded-pill" placeholder="********">
+                    <input type="password" id="user-pass" class="form-control rounded-pill" placeholder="********">
                 </div>
-                <button type="submit" class="btn btn-primary w-100 rounded-pill py-2">Create Account</button>
-                <p class="text-center mt-3 small">Already have an account? <a href="#">Login</a></p>
-            </form>
+                <button type="button" id="btn-signup" class="btn btn-primary w-100 rounded-pill py-2">Create Account</button>
+                <p id="auth-msg" class="text-center mt-3 small text-danger"></p>
+                <p class="text-center mt-2 small">Already have an account? <a href="#">Login</a></p>
+            </div>
+            
+            <div id="logged-in-container" style="display:none;" class="text-center py-4">
+                <div class="bi bi-person-check-fill text-success" style="font-size: 3rem;"></div>
+                <h5 id="welcome-text" class="fw-bold mt-2">Welcome!</h5>
+                <button type="button" id="btn-logout" class="btn btn-outline-danger btn-sm rounded-pill mt-3">Sign Out</button>
+            </div>
         </div>
     </div>
 
@@ -253,24 +247,111 @@
         </a>
     </nav>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Your Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyCF6xYhmPrAV_QRWib0qxjLFxWpT_Auvg4",
+          authDomain: "selena-tech-educational-hub.firebaseapp.com",
+          projectId: "selena-tech-educational-hub",
+          storageBucket: "selena-tech-educational-hub.firebasestorage.app",
+          messagingSenderId: "927163870296",
+          appId: "1:927163870296:web:3a92d73b28fbb42dd0ae2d"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUserEmail = "";
+
+        // --- MONITOR AUTH STATE ---
+        onAuthStateChanged(auth, (user) => {
+            const authForm = document.getElementById('auth-container');
+            const welcomeBox = document.getElementById('logged-in-container');
+            const welcomeText = document.getElementById('welcome-text');
+
+            if (user) {
+                currentUserEmail = user.email;
+                authForm.style.display = "none";
+                welcomeBox.style.display = "block";
+                welcomeText.innerText = "Hello, " + user.email;
+            } else {
+                currentUserEmail = "";
+                authForm.style.display = "block";
+                welcomeBox.style.display = "none";
+            }
+        });
+
+        // --- SIGN UP FUNCTION ---
+        document.getElementById('btn-signup').addEventListener('click', () => {
+            const email = document.getElementById('user-email').value;
+            const pass = document.getElementById('user-pass').value;
+            createUserWithEmailAndPassword(auth, email, pass).catch(e => alert(e.message));
+        });
+
+        document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
+
+        // --- COMMUNITY FEED LOGIC ---
+
+        // 1. Send Post to Firestore
+        document.getElementById('btn-post').addEventListener('click', async () => {
+            const text = document.getElementById('post-input').value;
+            if(!currentUserEmail) { alert("Please login to post!"); return; }
+            if(!text) return;
+
+            try {
+                await addDoc(collection(db, "posts"), {
+                    user: currentUserEmail,
+                    content: text,
+                    timestamp: serverTimestamp()
+                });
+                document.getElementById('post-input').value = ""; // Clear input
+            } catch (e) { console.error("Error adding post: ", e); }
+        });
+
+        // 2. Listen for Real-time Updates
+        const q = query(collection(db, "posts"), orderBy("timestamp", "desc"));
+        onSnapshot(q, (snapshot) => {
+            const postsContainer = document.getElementById('posts-container');
+            postsContainer.innerHTML = ""; // Clear loader
+            
+            snapshot.forEach((doc) => {
+                const post = doc.data();
+                const postHtml = `
+                    <div class="card shadow-sm mb-3 border-0">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="bg-info text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px; font-size: 0.8rem;">
+                                    ${post.user.substring(0,2).toUpperCase()}
+                                </div>
+                                <div class="ms-2">
+                                    <h6 class="mb-0 fw-bold small">${post.user}</h6>
+                                    <small class="text-muted" style="font-size: 0.7rem;">${post.timestamp ? new Date(post.timestamp.toDate()).toLocaleString() : 'Just now'}</small>
+                                </div>
+                            </div>
+                            <p class="mb-0 small">${post.content}</p>
+                        </div>
+                    </div>
+                `;
+                postsContainer.innerHTML += postHtml;
+            });
+        });
+
+    </script>
+
     <script>
         function showPage(pageId, navElement) {
-            // Hide all sections
-            document.querySelectorAll('.page-section').forEach(section => {
-                section.classList.remove('active');
-            });
-            // Show target section
+            document.querySelectorAll('.page-section').forEach(section => section.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
-
-            // Update Nav styling
             if(navElement) {
-                document.querySelectorAll('.nav-item').forEach(item => {
-                    item.classList.remove('active');
-                });
+                document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
                 navElement.classList.add('active');
             }
-            
-            // Scroll to top when changing pages
             window.scrollTo(0,0);
         }
     </script>
